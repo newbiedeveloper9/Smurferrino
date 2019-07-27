@@ -1,0 +1,15 @@
+﻿<Window x:Class="Smurferrino.Views.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        cal:Bind.AtDesignTime="True"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=viewModels:ShellViewModel, IsDesignTimeCreatable=True}" 
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:viewModels="clr-namespace:Smurferrino.ViewModels"
+        xmlns:views="clr-namespace:Smurferrino.Views">
+    <WrapPanel Orientation="Vertical" Background="White">
+        <views:MainView cal:View.Model="{Binding Path=MainViewModel}"/>
+    </WrapPanel>
+</Window>
