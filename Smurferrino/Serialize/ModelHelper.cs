@@ -16,38 +16,39 @@ namespace Smurferrino
         private static string _configHash = string.Empty;
         private static List<FunctionModel> _configSource = new List<FunctionModel>();
 
-        private static JsonSerializerSettings serializeSettings = new JsonSerializerSettings()
+        private static readonly JsonSerializerSettings SerializeSettings = new JsonSerializerSettings()
         {
             TypeNameHandling = TypeNameHandling.All
         };
 
+
         public static void SaveToFileByRAM(this List<FunctionModel> list, string fileName)
         {
             List<FunctionModel> listToSave = list.Where(x => !string.IsNullOrWhiteSpace(x.Json)).ToList();
-            serializeSettings.Formatting = Formatting.Indented;
-            string output = JsonConvert.SerializeObject(listToSave, serializeSettings);
+            SerializeSettings.Formatting = Formatting.Indented;
+            string output = JsonConvert.SerializeObject(listToSave, SerializeSettings);
 
             var finallyPath = $"{FilePaths.JsonDirectoryPath}{fileName}.json";
             File.WriteAllText(finallyPath, output);
 
-            FunctionModelSingleton.Instance.FunctionModels.ClearFromRAM();
+            FunctionModelSingleton.Instance.FunctionModels.ClearRAM();
         }
 
-        private static void ClearFromRAM(this List<FunctionModel> list)
+        private static void ClearRAM(this List<FunctionModel> list)
         {
             foreach (var model in list.Where(x => !string.IsNullOrWhiteSpace(x.Json)))
                 model.Json = string.Empty;
         }
 
-        public static void SaveModelRAM(this IModel model)
+        public static void SaveModelRAM(this BaseFunctionModel model)
         {
-            serializeSettings.Formatting = Formatting.Indented;
+            SerializeSettings.Formatting = Formatting.Indented;
 
             var functionModel = FunctionModelSingleton.Instance.FunctionModels.GetByModel(model);
-            functionModel.Json = JsonConvert.SerializeObject(model, typeof(IModel), serializeSettings);
+            functionModel.Json = JsonConvert.SerializeObject(model, typeof(BaseFunctionModel), SerializeSettings);
         }
 
-        public static IModel LoadModel(this IModel model, string fileName)
+        public static BaseFunctionModel LoadModel(this BaseFunctionModel model, string fileName)
         {
             var filePath = $"{FilePaths.JsonDirectoryPath}{fileName}.json";
 
@@ -55,7 +56,7 @@ namespace Smurferrino
             if (string.IsNullOrWhiteSpace(_configHash) || _configHash != fileHash)
             {
                 var source = File.ReadAllText(filePath);
-                _configSource = JsonConvert.DeserializeObject<List<FunctionModel>>(source, serializeSettings);
+                _configSource = JsonConvert.DeserializeObject<List<FunctionModel>>(source, SerializeSettings);
                 _configHash = fileHash;
             }
 
@@ -73,7 +74,7 @@ namespace Smurferrino
             return list.FirstOrDefault(x => x.Model.FunctionName.ToLower().Equals(functionName.ToLower()));
         }
 
-        public static FunctionModel GetByModel(this List<FunctionModel> list, IModel model)
+        public static FunctionModel GetByModel(this List<FunctionModel> list, BaseFunctionModel model)
         {
             return list.GetByFunctionName(model.FunctionName);
         }

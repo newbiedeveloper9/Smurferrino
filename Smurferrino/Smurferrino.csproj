@@ -75,18 +75,15 @@
     </ApplicationDefinition>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="ExecuteOnStart.cs" />
-    <Compile Include="PublishModels\ModelLoadedPub.cs" />
     <Compile Include="Serialize\FilePaths.cs" />
     <Compile Include="Serialize\FunctionModel.cs" />
     <Compile Include="Serialize\FunctionModelSingleton.cs" />
     <Compile Include="IShell.cs" />
-    <Compile Include="Models\IModel.cs" />
-    <Compile Include="ModelHelper.cs" />
+    <Compile Include="Models\BaseFunctionModel.cs" />
+    <Compile Include="Serialize\ModelHelper.cs" />
     <Compile Include="Models\BunnyModel.cs" />
     <Compile Include="Models\TriggerModel.cs" />
-    <Compile Include="Serialize\FunctionModelConverter.cs" />
     <Compile Include="Serialize\Hash.cs" />
-    <Compile Include="ViewModels\Functions\TriggerViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\Functions\TriggerView.xaml.cs">
@@ -140,6 +137,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Converters\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Smurferrino.Business\Smurferrino.Business.csproj">
+      <Project>{1c2f41a0-6af8-491e-b300-30c41380c196}</Project>
+      <Name>Smurferrino.Business</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,12 +11,12 @@ namespace Smurferrino.Serialize
     public class FunctionModel
     {
         [JsonProperty]
-        public IModel Model { get; set; }
+        public BaseFunctionModel Model { get; set; }
 
         [JsonIgnore]
         public string Json { get; set; }
 
-        public FunctionModel(IModel model)
+        public FunctionModel(BaseFunctionModel model)
         {
             Model = model;
         }

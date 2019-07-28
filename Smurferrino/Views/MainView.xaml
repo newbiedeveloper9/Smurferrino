@@ -11,35 +11,35 @@
         Height="490" Width="800">
     <StackPanel Orientation="Horizontal" Background="White">
         <WrapPanel Orientation="Vertical">
-            <GroupBox Margin="12" Header="Triggerbot">
-                    <StackPanel Margin="12">
-                        <CheckBox x:Name="TriggerbotCheckbox" Content="Enabled"/>
+            <GroupBox Margin="12" Header="Triggerbot" DataContext="{Binding Path=Trigger}">
+                <StackPanel Margin="12">
+                    <CheckBox IsChecked="{Binding Enabled}" Content="Enabled"/>
 
-                        <StackPanel Orientation="Vertical" Margin="0 12 0 0">
-                            <TextBlock Text="BeforeSpray delay"/>
-                            <TextBox Width="200" x:Name="triggerBeforeSprayDelay"/>
-                        </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="0 12 0 0">
+                        <TextBlock Text="PreSpray delay"/>
+                        <TextBox Text="{Binding PreSprayDelay}"/>
+                    </StackPanel>
 
-                        <StackPanel Orientation="Vertical" Margin="0 12 0 0">
-                            <TextBlock Text="AfterSpray delay"/>
-                            <TextBox Width="200" x:Name="triggerAfterSprayDelay"/>
-                        </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="0 12 0 0">
+                        <TextBlock Text="AfterSpray delay"/>
+                        <TextBox Text="{Binding AfterSprayDelay}"/>
+                    </StackPanel>
 
-                        <StackPanel Orientation="Vertical" Margin="0 12 0 0">
-                            <TextBlock Text="Spray duration"/>
-                            <TextBox Width="200" x:Name="triggerSprayDuration"/>
-                        </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="0 12 0 0">
+                        <TextBlock Text="Spray duration"/>
+                        <TextBox Text="{Binding SprayDuration}"/>
+                    </StackPanel>
 
-                        <StackPanel Orientation="Vertical" Margin="0 12 0 0">
-                            <TextBlock Text="Key activation"/>
-                            <TextBox Width="200" x:Name="triggerKeyActivation"/>
-                        </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="0 12 0 0">
+                        <TextBlock Text="KeyID activation (0 = always)"/>
+                        <TextBox Text="{Binding Key}"/>
+                    </StackPanel>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Margin="12" Header="Bunnyhop">
+            <GroupBox Margin="12" Header="Bunnyhop" DataContext="{Binding Path=Bunny}">
                 <StackPanel Margin="10">
-                    <CheckBox x:Name="BunnyhopCheckbox" Content="Enabled"/>
+                    <CheckBox IsChecked="{Binding Enabled}" Content="Enabled"/>
                 </StackPanel>
             </GroupBox>
 
@@ -47,6 +47,12 @@
                 <StackPanel Margin="10" Width="160">
                     <Button Content="Load" Margin="0 6 0 6" x:Name="LoadConfig"/>
                     <Button Content="Save as" Margin="0 6 0 6" x:Name="SaveConfig"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Margin="12" Header="CS:GO State">
+                <StackPanel Margin="10" Width="160">
+                    <Label Content="{Binding GameState, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
             </GroupBox>
         </WrapPanel>

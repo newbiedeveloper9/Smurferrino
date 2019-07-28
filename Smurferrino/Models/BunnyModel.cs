@@ -10,10 +10,13 @@ using Smurferrino.Serialize;
 
 namespace Smurferrino.Models
 {
-    public class BunnyModel : PropertyChangedBase, IModel
+    public class BunnyModel : BaseFunctionModel
     {
-        [JsonProperty]
-        public string FunctionName { get; set; } = "Bunny";
+        public override string FunctionName { get; set; } = "Bunny";
+        public override void DoWork()
+        {
+            throw new NotImplementedException();
+        }
 
         private bool _enabled;
 
