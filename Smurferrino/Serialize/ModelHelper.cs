@@ -28,8 +28,11 @@ namespace Smurferrino
             SerializeSettings.Formatting = Formatting.Indented;
             string output = JsonConvert.SerializeObject(listToSave, SerializeSettings);
 
-            var finallyPath = $"{FilePaths.JsonDirectoryPath}{fileName}.json";
-            File.WriteAllText(finallyPath, output);
+            var filePath = $"{FilePaths.JsonDirectoryPath}{fileName}";
+            if (!filePath.Contains(".json"))
+                filePath += ".json";
+
+            File.WriteAllText(filePath, output);
 
             FunctionModelSingleton.Instance.FunctionModels.ClearRAM();
         }
@@ -50,7 +53,9 @@ namespace Smurferrino
 
         public static BaseFunctionModel LoadModel(this BaseFunctionModel model, string fileName)
         {
-            var filePath = $"{FilePaths.JsonDirectoryPath}{fileName}.json";
+            var filePath = $"{FilePaths.JsonDirectoryPath}{fileName}";
+            if (!filePath.Contains(".json"))
+                filePath += ".json";
 
             var fileHash = Hash.CalculateMD5(filePath);
             if (string.IsNullOrWhiteSpace(_configHash) || _configHash != fileHash)

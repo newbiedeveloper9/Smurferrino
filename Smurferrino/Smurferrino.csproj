@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{194488C1-FFC4-4646-9ECB-EA7673F80669}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>Smurferrino</RootNamespace>
     <AssemblyName>Smurferrino</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -75,6 +75,7 @@
     </ApplicationDefinition>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="ExecuteOnStart.cs" />
+    <Compile Include="PublishSub\ClientReloadPub.cs" />
     <Compile Include="Serialize\FilePaths.cs" />
     <Compile Include="Serialize\FunctionModel.cs" />
     <Compile Include="Serialize\FunctionModelSingleton.cs" />
@@ -86,13 +87,6 @@
     <Compile Include="Serialize\Hash.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
-    <Compile Include="Views\Functions\TriggerView.xaml.cs">
-      <DependentUpon>TriggerView.xaml</DependentUpon>
-    </Compile>
-    <Page Include="Views\Functions\TriggerView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

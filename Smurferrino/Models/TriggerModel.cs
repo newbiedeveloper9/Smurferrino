@@ -6,31 +6,83 @@ using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using Newtonsoft.Json;
+using Smurferrino.Business.Enums;
 using Smurferrino.Business.Helpers;
-using Smurferrino.Business.LocPlayer;
+using Smurferrino.Business.Players;
 using Smurferrino.Helpers;
 
 namespace Smurferrino.Models
 {
     public class TriggerModel : BaseFunctionModel
     {
+        private Random random;
+
         public override string FunctionName { get; set; } = "Trigger";
+
+        public TriggerModel()
+        {
+            random = new Random();
+        }
 
         public override void DoWork()
         {
             while (true)
             {
-                if (!Enabled)
+                if (!Enabled || Global.ProcessState != ProcessState.Attached)
                 {
                     Thread.Sleep(1000);
                     continue;
                 }
 
-                if (Key == 0 || WinApi.GetAsyncKeyState(Key) < 0)
+                if (Key == 0 || Keyboard.IsPressed(Key))
                 {
-                    Global.LocalPlayer.Attack();
+                    if (CanShoot())
+                        TriggerPattern();
+                }
+                Thread.Sleep(5);
+            }
+        }
+
+        public void TriggerPattern()
+        {
+            Thread.Sleep(PreSprayDelay + random.Next(MaxRandomSleep));
+
+            if (!(Key == 0 || Keyboard.IsPressed(Key)))
+                return;
+
+            if (DoubleCheck)
+            {
+                if (CanShoot())
+                    Global.LocalPlayer.Attack(SprayDuration + random.Next(MaxRandomSleep));
+                else
+                {
+                    while (!CanShoot())
+                    {
+                        if (!(Key == 0 || Keyboard.IsPressed(Key)))
+                            return;
+
+                        Thread.Sleep(3);
+                    }
+                    Global.LocalPlayer.Attack(SprayDuration + random.Next(MaxRandomSleep));
                 }
             }
+            else
+            {
+                Global.LocalPlayer.Attack(SprayDuration + random.Next(MaxRandomSleep));
+            }
+
+            if (!(Key == 0 || Keyboard.IsPressed(Key)))
+                return;
+
+            Thread.Sleep(AfterSprayDelay + random.Next(MaxRandomSleep));
+        }
+
+        private bool CanShoot()
+        {
+            var localPlayer = Global.LocalPlayer;
+            var target = Global.LocalPlayer.CrosshairPlayer;
+
+            return target.Team != localPlayer.Team && localPlayer.IsAlive && target.IsAlive;
         }
 
         private bool _enabled;
@@ -82,10 +134,11 @@ namespace Smurferrino.Models
                 if (_afterSprayDelay == value) return;
                 _afterSprayDelay = value;
                 NotifyOfPropertyChange(() => AfterSprayDelay);
+
             }
         }
 
-        private int _key;
+        private int _key = 0;
         [JsonProperty]
         public int Key
         {
@@ -95,6 +148,31 @@ namespace Smurferrino.Models
                 if (_key == value) return;
                 _key = value;
                 NotifyOfPropertyChange(() => Key);
+            }
+        }
+
+        private bool _doubleCheck;
+        [JsonProperty]
+        public bool DoubleCheck
+        {
+            get => _doubleCheck;
+            set
+            {
+                if (_doubleCheck == value) return;
+                _doubleCheck = value;
+                NotifyOfPropertyChange(() => DoubleCheck);
+            }
+        }
+
+        private int _maxRandomSleep;
+        public int MaxRandomSleep
+        {
+            get => _maxRandomSleep;
+            set
+            {
+                if (_maxRandomSleep == value) return;
+                _maxRandomSleep = value;
+                NotifyOfPropertyChange(() => MaxRandomSleep);
             }
         }
     }

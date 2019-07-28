@@ -11,35 +11,42 @@
         Height="490" Width="800">
     <StackPanel Orientation="Horizontal" Background="White">
         <WrapPanel Orientation="Vertical">
-            <GroupBox Margin="12" Header="Triggerbot" DataContext="{Binding Path=Trigger}">
+            <GroupBox Margin="12" Header="Triggerbot" DataContext="{Binding Path=Trigger, UpdateSourceTrigger=PropertyChanged}">
                 <StackPanel Margin="12">
-                    <CheckBox IsChecked="{Binding Enabled}" Content="Enabled"/>
+                    <CheckBox IsChecked="{Binding Enabled, Mode=TwoWay}" Content="Enabled"/>
+                    <CheckBox IsChecked="{Binding DoubleCheck, UpdateSourceTrigger=PropertyChanged}" Content="Double check" Margin="0 6 0 0"/>
 
                     <StackPanel Orientation="Vertical" Margin="0 12 0 0">
                         <TextBlock Text="PreSpray delay"/>
-                        <TextBox Text="{Binding PreSprayDelay}"/>
+                        <TextBox Text="{Binding PreSprayDelay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" Margin="0 12 0 0">
                         <TextBlock Text="AfterSpray delay"/>
-                        <TextBox Text="{Binding AfterSprayDelay}"/>
+                        <TextBox Text="{Binding AfterSprayDelay, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" Margin="0 12 0 0">
                         <TextBlock Text="Spray duration"/>
-                        <TextBox Text="{Binding SprayDuration}"/>
+                        <TextBox Text="{Binding SprayDuration, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" Margin="0 12 0 0">
                         <TextBlock Text="KeyID activation (0 = always)"/>
-                        <TextBox Text="{Binding Key}"/>
+                        <TextBox Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Margin="0 12 0 0">
+                        <TextBlock Text="Random max sleep (0 = constant)"/>
+                        <TextBox Text="{Binding MaxRandomSleep, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <Button Content="Test trigger" cal:Message.Attach="[Event Click] = [Action TriggerPattern()]" Margin="0 12 0 0"/>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Margin="12" Header="Bunnyhop" DataContext="{Binding Path=Bunny}">
+            <GroupBox Margin="12" Header="Bunnyhop" DataContext="{Binding Path=Bunny, UpdateSourceTrigger=PropertyChanged}">
                 <StackPanel Margin="10">
-                    <CheckBox IsChecked="{Binding Enabled}" Content="Enabled"/>
+                    <CheckBox IsChecked="{Binding Enabled, UpdateSourceTrigger=PropertyChanged}" Content="Enabled"/>
                 </StackPanel>
             </GroupBox>
 
@@ -51,8 +58,9 @@
             </GroupBox>
 
             <GroupBox Margin="12" Header="CS:GO State">
-                <StackPanel Margin="10" Width="160">
+                <StackPanel Margin="10" Width="120">
                     <Label Content="{Binding GameState, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="Reload" x:Name="ClientReload" Margin="6 6 6 0"/>
                 </StackPanel>
             </GroupBox>
         </WrapPanel>

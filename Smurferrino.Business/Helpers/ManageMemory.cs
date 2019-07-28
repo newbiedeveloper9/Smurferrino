@@ -6,7 +6,7 @@ using Smurferrino.Helpers;
 
 namespace Smurferrino.Business.Helpers
 {
-    public class ManageMemory
+    public static class ManageMemory
     {
         public static Process Process;
         public static IntPtr ptrProcessHandle;
@@ -47,37 +47,37 @@ namespace Smurferrino.Business.Helpers
             return -1;
         }
 
-        public static T ReadMemory<T>(int Address) where T : struct
+        public static T ReadMemory<T>(int address) where T : struct
         {
             int ByteSize = Marshal.SizeOf(typeof(T)); // Get ByteSize Of DataType
             byte[] buffer = new byte[ByteSize]; // Create A Buffer With Size Of ByteSize
-            WinApi.ReadProcessMemory((int)ptrProcessHandle, Address, buffer, buffer.Length,
+            WinApi.ReadProcessMemory((int)ptrProcessHandle, address, buffer, buffer.Length,
                 ref NumberOfBytesRead); // Read value From MemoryAddr
 
             return ByteArrayToStructure<T>(buffer); // Transform the ByteArray to The Desired DataType
         }
 
-        public static float[] ReadMatrix<T>(int Address, int matrixSize) where T : struct
+        public static float[] ReadMatrix<T>(int address, int matrixSize) where T : struct
         {
             int ByteSize = Marshal.SizeOf(typeof(T));
             byte[] buffer = new byte[ByteSize * matrixSize]; // Create A Buffer With Size Of ByteSize * matrixSize
-            WinApi.ReadProcessMemory((int)ptrProcessHandle, Address, buffer, buffer.Length, ref NumberOfBytesRead);
+            WinApi.ReadProcessMemory((int)ptrProcessHandle, address, buffer, buffer.Length, ref NumberOfBytesRead);
 
             return ConvertToFloatArray(buffer); // Transform the ByteArray to A Float Array (PseudoMatrix ;P)
         }
 
-        public static void WriteMemory<T>(int Address, object value)
+        public static void WriteMemory<T>(int address, object value)
         {
             byte[] buffer = StructureToByteArray(value); // Transform Data To ByteArray 
 
-            WinApi.WriteProcessMemory((int)ptrProcessHandle, Address, buffer, buffer.Length, out NumberOfBytesWritten);
+            WinApi.WriteProcessMemory((int)ptrProcessHandle, address, buffer, buffer.Length, out NumberOfBytesWritten);
         }
 
-        public static void WriteMemory<T>(int Address, char[] value)
+        public static void WriteMemory<T>(int address, char[] value)
         {
             byte[] buffer = Encoding.UTF8.GetBytes(value);
 
-            WinApi.WriteProcessMemory((int)ptrProcessHandle, Address, buffer, buffer.Length, out NumberOfBytesWritten);
+            WinApi.WriteProcessMemory((int)ptrProcessHandle, address, buffer, buffer.Length, out NumberOfBytesWritten);
         }
 
         #region Transformation
@@ -137,5 +137,5 @@ namespace Smurferrino.Business.Helpers
 
 
 //Thanks to
-//https://github.com/C0re-Cheats/C0reExternal-Base-v2/blob/master/MemoryAddr.cs
+//https://github.com/C0re-Cheats/C0reExternal-BaseOffset-v2/blob/master/MemoryAddr.cs
 //<3

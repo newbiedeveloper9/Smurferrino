@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Smurferrino.Business.Enums;
-using Smurferrino.Business.LocPlayer;
+using Smurferrino.Business.Players;
 
 namespace Smurferrino.Business.Helpers
 {

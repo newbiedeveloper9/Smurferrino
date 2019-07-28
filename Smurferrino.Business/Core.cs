@@ -5,7 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Smurferrino.Business.Enums;
 using Smurferrino.Business.Helpers;
-using Smurferrino.Business.LocPlayer;
+using Smurferrino.Business.Memory;
+using Smurferrino.Business.Players;
 using Smurferrino.Helpers;
 
 namespace Smurferrino.Business
@@ -13,6 +14,7 @@ namespace Smurferrino.Business
     public class Core
     {
         public Attach Attach { get; set; }
+        public BaseMemory Memory { get; set; }
         public LocalPlayer LocalPlayer { get; set; }
 
         public static Core Initialize()
@@ -20,7 +22,8 @@ namespace Smurferrino.Business
             var mainThread = new Core
             {
                 Attach = new Attach(),
-                LocalPlayer = new LocalPlayer()
+                Memory =  new BaseMemory(),
+                LocalPlayer = new LocalPlayer(),
             };
 
             return mainThread;

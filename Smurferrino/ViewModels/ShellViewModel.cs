@@ -1,9 +1,11 @@
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using Smurferrino.Business;
+using Smurferrino.PublishSub;
 
 namespace Smurferrino.ViewModels {
-    public class ShellViewModel : PropertyChangedBase, IShell
+    public class ShellViewModel : PropertyChangedBase, IShell,
+        IHandle<IClientReloadPub>
     {
         private readonly IEventAggregator _eventAggregator;
         private Core _businessLibrary;
@@ -19,6 +21,12 @@ namespace Smurferrino.ViewModels {
                 _businessLibrary = Core.Initialize());
 
             MainViewModel = new MainViewModel(_eventAggregator);
+        }
+
+        public void Handle(IClientReloadPub message)
+        {
+            Task.Factory.StartNew(() =>
+                _businessLibrary = Core.Initialize());
         }
     }
 }
