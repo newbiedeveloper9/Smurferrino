@@ -10,8 +10,10 @@ using Caliburn.Micro;
 using Microsoft.Win32;
 using Smurferrino.Business.Enums;
 using Smurferrino.Business.Helpers;
+using Smurferrino.Business.Objects;
 using Smurferrino.Business.Players;
-using Smurferrino.Models;
+using Smurferrino.Business.Structs;
+using Smurferrino.FunctionModels;
 using Smurferrino.PublishSub;
 using Smurferrino.Serialize;
 
@@ -22,7 +24,9 @@ namespace Smurferrino.ViewModels
         private readonly IEventAggregator _eventAggregator;
 
         #region Properties
+
         private TriggerModel _trigger;
+
         public TriggerModel Trigger
         {
             get => _trigger;
@@ -35,6 +39,7 @@ namespace Smurferrino.ViewModels
         }
 
         private BunnyModel _bunny;
+
         public BunnyModel Bunny
         {
             get => _bunny;
@@ -46,11 +51,33 @@ namespace Smurferrino.ViewModels
             }
         }
 
+        private GlowModel _glow;
+        public GlowModel Glow
+        {
+            get => _glow;
+            set
+            {
+                if (_glow == value) return;
+                _glow = value;
+                NotifyOfPropertyChange(() => Glow);
+            }
+        }
 
-        #endregion
+        private VisualsModel _visuals;
+        public VisualsModel Visuals
+        {
+            get => _visuals;
+            set
+            {
+                if (_visuals == value) return;
+                _visuals = value;
+                NotifyOfPropertyChange(() => Visuals);
+            }
+        }
 
-        #region Properties
+
         private ProcessState _gameState;
+
         public ProcessState GameState
         {
             get => _gameState;
@@ -61,19 +88,16 @@ namespace Smurferrino.ViewModels
                 NotifyOfPropertyChange(() => GameState);
 
                 if (value == ProcessState.Attached || value == ProcessState.Null)
-                {
                     CanClientReload = true;
-                }
                 else
-                {
                     CanClientReload = false;
-                }
 
                 NotifyOfPropertyChange(() => CanClientReload);
             }
         }
 
         private bool _canClientReload;
+
         public bool CanClientReload
         {
             get => _canClientReload;
@@ -88,6 +112,7 @@ namespace Smurferrino.ViewModels
         #endregion
 
         #region .ctor
+
         public MainViewModel()
         {
             Initialize();
@@ -100,12 +125,16 @@ namespace Smurferrino.ViewModels
 
             Initialize();
         }
+
         #endregion
 
         private void Initialize()
         {
             Trigger = (TriggerModel)FunctionModelSingleton.Instance.FunctionModels.GetByFunctionName("Trigger").Model;
             Bunny = (BunnyModel)FunctionModelSingleton.Instance.FunctionModels.GetByFunctionName("Bunny").Model;
+            Glow = (GlowModel) FunctionModelSingleton.Instance.FunctionModels.GetByFunctionName("Glow").Model;
+            Visuals = (VisualsModel) FunctionModelSingleton.Instance.FunctionModels.GetByFunctionName("Visuals").Model;
+
 
             ProcessStateClass.ProcessStateChanged += (sender, e) => GameState = Global.ProcessState;
         }
@@ -122,8 +151,10 @@ namespace Smurferrino.ViewModels
                 {
                     var fileName = Path.GetFileName(openFileDialog.FileName);
 
-                    Trigger = (TriggerModel) Trigger.LoadModel(fileName);
-                    Bunny = (BunnyModel) Bunny.LoadModel(fileName);
+                    Trigger = (TriggerModel)Trigger.LoadModel(fileName);
+                    Bunny = (BunnyModel)Bunny.LoadModel(fileName);
+                    Glow = (GlowModel)Glow.LoadModel(fileName);
+                    Visuals = (VisualsModel) Visuals.LoadModel(fileName);
                 }
             }
         }
@@ -132,6 +163,8 @@ namespace Smurferrino.ViewModels
         {
             Trigger.SaveModelRAM();
             Bunny.SaveModelRAM();
+            Glow.SaveModelRAM();
+            Visuals.SaveModelRAM();
 
             var saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Config|*.json";
@@ -149,6 +182,21 @@ namespace Smurferrino.ViewModels
         {
             _eventAggregator.PublishOnUIThread(
                 new ClientReloadPub());
+        }
+
+        public void Test()
+        {
+            /*Task.Factory.StartNew(() =>
+            {
+                while (true)
+                {
+                    Global.LocalPlayer.FOV = 150;
+                    Thread.Sleep(5);
+                }
+            });*/
+
+            //  Global.LocalPlayer.FlashMaxAlpha = 255;
+
         }
     }
 }

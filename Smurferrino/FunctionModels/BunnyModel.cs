@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Caliburn.Micro;
+﻿using System.Threading;
 using Newtonsoft.Json;
 using Smurferrino.Business.Enums;
 using Smurferrino.Business.Helpers;
 using Smurferrino.Business.Players;
-using Smurferrino.Helpers;
-using Smurferrino.Serialize;
 
-namespace Smurferrino.Models
+namespace Smurferrino.FunctionModels
 {
     public class BunnyModel : BaseFunctionModel
     {

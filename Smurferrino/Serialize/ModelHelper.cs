@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using Caliburn.Micro;
 using Newtonsoft.Json;
-using Smurferrino.Models;
+using Smurferrino.FunctionModels;
 using Smurferrino.Serialize;
 
 namespace Smurferrino

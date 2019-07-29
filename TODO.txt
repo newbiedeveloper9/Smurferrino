@@ -1,0 +1,6 @@
+- Flash reduction (by %)
+- Flash remover
+- No Aim/View punch
+- Trigger dormant/immune
+- Trigger check ammo/weapon (grenades, c4, snipers [scope])
+- Trigger stops walk

@@ -13,7 +13,7 @@
         <WrapPanel Orientation="Vertical">
             <GroupBox Margin="12" Header="Triggerbot" DataContext="{Binding Path=Trigger, UpdateSourceTrigger=PropertyChanged}">
                 <StackPanel Margin="12">
-                    <CheckBox IsChecked="{Binding Enabled, Mode=TwoWay}" Content="Enabled"/>
+                    <CheckBox IsChecked="{Binding Enabled, Mode=TwoWay}" Content="Enable"/>
                     <CheckBox IsChecked="{Binding DoubleCheck, UpdateSourceTrigger=PropertyChanged}" Content="Double check" Margin="0 6 0 0"/>
 
                     <StackPanel Orientation="Vertical" Margin="0 12 0 0">
@@ -40,13 +40,40 @@
                         <TextBlock Text="Random max sleep (0 = constant)"/>
                         <TextBox Text="{Binding MaxRandomSleep, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
-                    <Button Content="Test trigger" cal:Message.Attach="[Event Click] = [Action TriggerPattern()]" Margin="0 12 0 0"/>
                 </StackPanel>
             </GroupBox>
 
             <GroupBox Margin="12" Header="Bunnyhop" DataContext="{Binding Path=Bunny, UpdateSourceTrigger=PropertyChanged}">
                 <StackPanel Margin="10">
-                    <CheckBox IsChecked="{Binding Enabled, UpdateSourceTrigger=PropertyChanged}" Content="Enabled"/>
+                    <CheckBox IsChecked="{Binding Enabled, UpdateSourceTrigger=PropertyChanged}" Content="Enable"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Margin="12" Header="Wallhack" DataContext="{Binding Path=Glow, UpdateSourceTrigger=PropertyChanged}">
+                <StackPanel Margin="12">
+                    <CheckBox IsChecked="{Binding Enabled, Mode=TwoWay}" Content="Enable"/>
+                    <CheckBox IsChecked="{Binding DoubleCheck, UpdateSourceTrigger=PropertyChanged}" Content="Show teammates" Margin="0 6 0 0"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Margin="12" Header="Visuals" DataContext="{Binding Path=Visuals, UpdateSourceTrigger=PropertyChanged}">
+                <StackPanel Margin="12">
+                    <StackPanel Orientation="Vertical" Margin="0 0 0 0">
+                        <TextBlock Text="Flashbang alpha (1-100%)"/>
+                        <TextBox Text="{Binding FlashbangAlphaPercentage, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+
+                    <CheckBox IsChecked="{Binding FOVEnabled, UpdateSourceTrigger=PropertyChanged}" Content="FOV Enabled (CPU [*])" Margin="0 12 0 0"/>
+
+                    <StackPanel Orientation="Vertical" Margin="0 6 0 0">
+                        <TextBlock Text="FOV (1-179, default=0)"/>
+                        <TextBox Text="{Binding FOV, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Vertical" Margin="0 12 0 0">
+                        <TextBlock Text="FOV Key activation (0 = always)"/>
+                        <TextBox Text="{Binding FOVKey, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
                 </StackPanel>
             </GroupBox>
 

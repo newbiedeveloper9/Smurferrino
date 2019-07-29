@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smurferrino", "Smurferrino\Smurferrino.csproj", "{194488C1-FFC4-4646-9ECB-EA7673F80669}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smurferrino.Business", "Smurferrino.Business\Smurferrino.Business.csproj", "{1C2F41A0-6AF8-491E-B300-30C41380C196}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Smurferrino.Business", "Smurferrino.Business\Smurferrino.Business.csproj", "{1C2F41A0-6AF8-491E-B300-30C41380C196}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5EF99E77-2BFF-493C-A772-E28C581930BD}"
+	ProjectSection(SolutionItems) = preProject
+		TODO.txt = TODO.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

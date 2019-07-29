@@ -1,9 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Caliburn.Micro;
 using Newtonsoft.Json;
 
-namespace Smurferrino.Models
+namespace Smurferrino.FunctionModels
 {
     public abstract class BaseFunctionModel : PropertyChangedBase
     {

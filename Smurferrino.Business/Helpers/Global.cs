@@ -21,7 +21,6 @@ namespace Smurferrino.Business.Helpers
         }
 
        public static LocalPlayer LocalPlayer { get; set; }
-
-
+       public static List<Player> Players { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace Smurferrino.Business
         public Attach Attach { get; set; }
         public BaseMemory Memory { get; set; }
         public LocalPlayer LocalPlayer { get; set; }
+        public PlayerHelper Players { get; set; }
 
         public static Core Initialize()
         {
@@ -24,6 +25,7 @@ namespace Smurferrino.Business
                 Attach = new Attach(),
                 Memory =  new BaseMemory(),
                 LocalPlayer = new LocalPlayer(),
+                Players =  new PlayerHelper(),
             };
 
             return mainThread;

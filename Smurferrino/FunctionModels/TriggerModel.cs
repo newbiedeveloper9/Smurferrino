@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Caliburn.Micro;
 using Newtonsoft.Json;
 using Smurferrino.Business.Enums;
 using Smurferrino.Business.Helpers;
 using Smurferrino.Business.Players;
-using Smurferrino.Helpers;
 
-namespace Smurferrino.Models
+namespace Smurferrino.FunctionModels
 {
     public class TriggerModel : BaseFunctionModel
     {
-        private Random random;
+        private readonly Random random;
 
         public override string FunctionName { get; set; } = "Trigger";
 

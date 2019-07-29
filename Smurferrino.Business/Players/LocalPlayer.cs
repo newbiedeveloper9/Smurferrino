@@ -12,8 +12,9 @@ namespace Smurferrino.Business.Players
             Global.LocalPlayer = this;
         }
 
+        public int Index { get; set; }
         /// <summary>
-        /// Base offset of localplayer
+        /// Returns LocalPlayer's handler
         /// </summary>
         internal int BaseOffset =>
             ManageMemory.ReadMemory<int>(BaseMemory.BaseAddress + MemoryAddr.dwLocalPlayer);
@@ -57,6 +58,43 @@ namespace Smurferrino.Business.Players
 
         public bool IsAlive =>
             Health > 0;
+
+        /// <summary>
+        /// Return and sets client FOV (120-150 is better, sees much more)
+        /// </summary>
+        public int FOV
+        {
+            get => ManageMemory.ReadMemory<int>(BaseOffset + MemoryAddr.m_iFOV);
+            set => ManageMemory.WriteMemory<int>(BaseOffset + MemoryAddr.m_iFOV, value);
+        }
+
+        /// <summary>
+        /// Returns and sets Flash alpha mask, 255 is max. 
+        /// </summary>
+        public float FlashMaxAlpha
+        {
+            get => ManageMemory.ReadMemory<float>(BaseOffset + MemoryAddr.m_flFlashMaxAlpha);
+            set
+            {
+                if (value > 255)
+                    value = 255;
+                if (value < 1)
+                    value = 1;
+                ManageMemory.WriteMemory<float>(BaseOffset + MemoryAddr.m_flFlashMaxAlpha, value);
+            }
+        }
+
+        /// <summary>
+        /// Returns and sets 
+        /// </summary>
+        public float FlashAlphaDuration
+        {
+            get => ManageMemory.ReadMemory<float>(BaseOffset + MemoryAddr.m_flFlashDuration);
+            set => ManageMemory.WriteMemory<float>(BaseOffset + MemoryAddr.m_flFlashDuration, value);
+        }
+
+        public int CompetetiveRank => 
+            ManageMemory.ReadMemory<int>(BaseOffset + MemoryAddr.m_iCompetitiveRanking);
 
     }
 }

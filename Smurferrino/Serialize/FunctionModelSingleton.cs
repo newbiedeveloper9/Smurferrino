@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Smurferrino.Models;
+using Smurferrino.FunctionModels;
 using Smurferrino.Serialize;
 
 namespace Smurferrino
@@ -21,6 +21,8 @@ namespace Smurferrino
             {
                 new FunctionModel(new BunnyModel()),
                 new FunctionModel(new TriggerModel()),
+                new FunctionModel(new GlowModel()),
+                new FunctionModel(new VisualsModel()),
             };
         }
 
