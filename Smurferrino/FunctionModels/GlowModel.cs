@@ -13,7 +13,7 @@ namespace Smurferrino.FunctionModels
         {
             while (true)
             {
-                if (!Enabled || Global.LocalPlayer.Team == TeamEnum.Spectator)
+                if (!Enabled || Global.ProcessState != ProcessState.Attached)
                 {
                     Thread.Sleep(1000);
                     continue;
@@ -32,7 +32,7 @@ namespace Smurferrino.FunctionModels
 
                     player.SetGlow(rgba);
                 }
-                Thread.Sleep(3);
+                Thread.Sleep(2);
             }
         }
 

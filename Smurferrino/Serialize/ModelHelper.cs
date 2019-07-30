@@ -7,6 +7,7 @@ using System.Text;
 using Caliburn.Micro;
 using Newtonsoft.Json;
 using Smurferrino.FunctionModels;
+using Smurferrino.Helpers;
 using Smurferrino.Serialize;
 
 namespace Smurferrino
@@ -69,7 +70,11 @@ namespace Smurferrino
             var oldFunctionModel = FunctionModelSingleton.Instance.FunctionModels.GetByModel(model);
 
             oldFunctionModel.Json = string.Empty;
-            oldFunctionModel.Model = newFunctionModel.Model;
+
+            if (newFunctionModel == null)
+                return oldFunctionModel.Model;
+
+            oldFunctionModel.Model = newFunctionModel.Model.Clone();
 
             return oldFunctionModel.Model;
         }

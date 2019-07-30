@@ -5,6 +5,8 @@
         Null,
         Idle = 257,
         Jump = 256,
-        MidJump = 261
+        DuckStart = 261,
+        DuckFinal = 263,
+        DuckJump = 262,
     }
 }

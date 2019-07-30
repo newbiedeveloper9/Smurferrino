@@ -3,43 +3,68 @@ using System.Collections.Generic;
 using System.Text;
 using Smurferrino.Business.Helpers;
 using Smurferrino.Business.Memory;
+using Smurferrino.Business.Players;
 
 namespace Smurferrino.Business.Weapons
 {
     public class Weapon
     {
-        public int Index { get; set; }
-        public Weapon(int index)
+        private int Pointer;
+
+        public Weapon()
         {
-            Index = index;
+            
+        }
+
+        private Weapon(int pointer)
+        {
+            Pointer = pointer;
         }
 
         /// <summary>
-        /// Returns weapon's handler
+        /// Returns <see cref="Player"/> weapon on <see cref="index"/> slot
         /// </summary>
-        protected internal int BaseOffset
+        /// <param name="playerBase">Pointer(handler) of player(</param>
+        /// <param name="index">Inventory index (1 knife, 2 pistol etc.)</param>
+        /// <returns></returns>
+        public Weapon MyWeapons(int playerBase, int index)
         {
-            get
-            {
-                int myWeapons = ManageMemory.ReadMemory<int>
-                                    (Global.LocalPlayer.BaseOffset + MemoryAddr.m_hMyWeapons + Index * 0x4) & 0xfff;
-
-                return ManageMemory.ReadMemory<int>
-                    (BaseMemory.BaseAddress + MemoryAddr.dwEntityList + (myWeapons - 1) * 0x10);
-            }
+            int pointer = ManageMemory.ReadMemory<int>(playerBase + MemoryAddr.m_hMyWeapons + (index - 1) * 0x4) & 0xFFF;
+            return new Weapon(pointer);
         }
 
         /// <summary>
-        /// Returns weapon's Id
+        /// Returns instance of active weapon
         /// </summary>
-        public int Id => 
+        /// <param name="playerBase">Pointer(handler) of player</param>
+        /// <returns></returns>
+        public Weapon ActiveWeapon(int playerBase)
+        {
+            int pointer = ManageMemory.ReadMemory<int>(playerBase + MemoryAddr.m_hActiveWeapon) & 0xFFF;
+            return new Weapon(pointer);
+        }
+
+        protected internal int BaseOffset =>
+            ManageMemory.ReadMemory<int>
+                (BaseMemory.BaseAddress + MemoryAddr.dwEntityList + (Pointer - 1) * 0x10);
+
+        /// <summary>
+        /// Returns weapon Id
+        /// </summary>
+        public int Id =>
             ManageMemory.ReadMemory<int>(BaseOffset + MemoryAddr.m_iItemDefinitionIndex);
 
+        /// <summary>
+        /// Returns weapon ammo
+        /// </summary>
+        public int Ammo => ManageMemory.ReadMemory<int>(BaseOffset + MemoryAddr.m_iClip1);
 
         /// <summary>
-        /// Returns weapon's name
+        /// Returns weapon name
         /// </summary>
         public string Name =>
             WeaponHelper.WeaponNameDictionary[Id];
+
+        
     }
 }

@@ -23,6 +23,7 @@ namespace Smurferrino
                 new FunctionModel(new TriggerModel()),
                 new FunctionModel(new GlowModel()),
                 new FunctionModel(new VisualsModel()),
+                new FunctionModel(new CompSpecsModel())
             };
         }
 

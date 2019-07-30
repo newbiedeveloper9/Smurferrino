@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Smurferrino.Business.Enums;
 using Smurferrino.Business.Helpers;
 using Smurferrino.Business.Players;
+using Smurferrino.Helpers;
 
 namespace Smurferrino.FunctionModels
 {
@@ -33,7 +34,8 @@ namespace Smurferrino.FunctionModels
                     if (CanShoot())
                         TriggerPattern();
                 }
-                Thread.Sleep(5);
+
+                ThreadSleep.Set(FunctionName);
             }
         }
 
@@ -55,7 +57,7 @@ namespace Smurferrino.FunctionModels
                         if (!(Key == 0 || Keyboard.IsPressed(Key)))
                             return;
 
-                        Thread.Sleep(3);
+                        ThreadSleep.Set(FunctionName);
                     }
                     Global.LocalPlayer.Attack(SprayDuration + random.Next(MaxRandomSleep));
                 }
@@ -74,11 +76,16 @@ namespace Smurferrino.FunctionModels
         private bool CanShoot()
         {
             var localPlayer = Global.LocalPlayer;
-            var target = Global.LocalPlayer.CrosshairPlayer;
+            var weapon = localPlayer.Inventory.ActiveWeapon.TypeOfWeapon();
 
-            return target.Team != localPlayer.Team && localPlayer.IsAlive && target.IsAlive;
+            var target = Global.LocalPlayer.CrosshairPlayer;
+            Console.WriteLine(localPlayer);
+            return target.Team != localPlayer.Team && localPlayer.IsAlive && target.IsAlive && !target.Dormant &&
+                   weapon != WeaponType.Bomb && weapon != WeaponType.Grenade && weapon != WeaponType.Knife;
         }
 
+
+        #region Properties
         private bool _enabled;
         [JsonProperty]
         public bool Enabled
@@ -159,6 +166,7 @@ namespace Smurferrino.FunctionModels
         }
 
         private int _maxRandomSleep;
+        [JsonProperty]
         public int MaxRandomSleep
         {
             get => _maxRandomSleep;
@@ -169,5 +177,6 @@ namespace Smurferrino.FunctionModels
                 NotifyOfPropertyChange(() => MaxRandomSleep);
             }
         }
+        #endregion Properties
     }
 }

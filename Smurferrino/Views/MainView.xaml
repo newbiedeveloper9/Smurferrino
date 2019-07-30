@@ -3,12 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:enums="clr-namespace:Smurferrino.Enums"
         cal:Bind.AtDesignTime="True"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel, IsDesignTimeCreatable=True}" 
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:viewModels="clr-namespace:Smurferrino.ViewModels"
-        Height="490" Width="800">
+        Height="490" Width="900">
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="enumValues"
+                           MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enums:ComputerSpec"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+
     <StackPanel Orientation="Horizontal" Background="White">
         <WrapPanel Orientation="Vertical">
             <GroupBox Margin="12" Header="Triggerbot" DataContext="{Binding Path=Trigger, UpdateSourceTrigger=PropertyChanged}">
@@ -51,19 +62,21 @@
 
             <GroupBox Margin="12" Header="Wallhack" DataContext="{Binding Path=Glow, UpdateSourceTrigger=PropertyChanged}">
                 <StackPanel Margin="12">
-                    <CheckBox IsChecked="{Binding Enabled, Mode=TwoWay}" Content="Enable"/>
-                    <CheckBox IsChecked="{Binding DoubleCheck, UpdateSourceTrigger=PropertyChanged}" Content="Show teammates" Margin="0 6 0 0"/>
+                    <CheckBox IsChecked="{Binding Enabled, UpdateSourceTrigger=PropertyChanged}" Content="Enable"/>
+                    <CheckBox IsChecked="{Binding ShowTeammates, UpdateSourceTrigger=PropertyChanged}" Content="Show teammates" Margin="0 6 0 0"/>
                 </StackPanel>
             </GroupBox>
 
             <GroupBox Margin="12" Header="Visuals" DataContext="{Binding Path=Visuals, UpdateSourceTrigger=PropertyChanged}">
                 <StackPanel Margin="12">
-                    <StackPanel Orientation="Vertical" Margin="0 0 0 0">
+                    <CheckBox IsChecked="{Binding RadarSpottedEnabled, UpdateSourceTrigger=PropertyChanged}" Content="Radar spotting" Margin="0 0 0 0"/>
+
+                    <StackPanel Orientation="Vertical" Margin="0 12 0 0">
                         <TextBlock Text="Flashbang alpha (1-100%)"/>
                         <TextBox Text="{Binding FlashbangAlphaPercentage, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
 
-                    <CheckBox IsChecked="{Binding FOVEnabled, UpdateSourceTrigger=PropertyChanged}" Content="FOV Enabled (CPU [*])" Margin="0 12 0 0"/>
+                    <CheckBox IsChecked="{Binding FOVEnabled, UpdateSourceTrigger=PropertyChanged}" Content="FOV Enable" Margin="0 12 0 0"/>
 
                     <StackPanel Orientation="Vertical" Margin="0 6 0 0">
                         <TextBlock Text="FOV (1-179, default=0)"/>
@@ -89,6 +102,18 @@
                     <Label Content="{Binding GameState, UpdateSourceTrigger=PropertyChanged}"/>
                     <Button Content="Reload" x:Name="ClientReload" Margin="6 6 6 0"/>
                 </StackPanel>
+            </GroupBox>
+
+            <GroupBox Margin="12" Header="Computer specs (Refresh delay)"
+                      DataContext="{Binding Path=CompSpecs, UpdateSourceTrigger=PropertyChanged}">
+
+                <ComboBox  ItemsSource="{Binding Source={StaticResource enumValues}, UpdateSourceTrigger=PropertyChanged}"
+                           SelectedValue="{Binding UserSpec, UpdateSourceTrigger=PropertyChanged}"
+                           Margin="12"/>
+            </GroupBox>
+
+            <GroupBox Header="TestModel platform" DataContext="{Binding Path=TestModel, UpdateSourceTrigger=PropertyChanged}">
+
             </GroupBox>
         </WrapPanel>
     </StackPanel>

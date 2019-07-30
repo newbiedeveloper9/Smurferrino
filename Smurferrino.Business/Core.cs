@@ -24,7 +24,6 @@ namespace Smurferrino.Business
             {
                 Attach = new Attach(),
                 Memory =  new BaseMemory(),
-                LocalPlayer = new LocalPlayer(),
                 Players =  new PlayerHelper(),
             };
 

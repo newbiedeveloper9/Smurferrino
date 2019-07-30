@@ -1,8 +1,11 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
+using Darc_Euphoria.Euphoric;
 using Newtonsoft.Json;
 using Smurferrino.Business.Enums;
 using Smurferrino.Business.Helpers;
 using Smurferrino.Business.Players;
+using Smurferrino.Helpers;
 
 namespace Smurferrino.FunctionModels
 {
@@ -21,9 +24,12 @@ namespace Smurferrino.FunctionModels
 
                 if (Keyboard.IsPressed(0x20))
                 {
-                    if (Global.LocalPlayer.State == PlayerState.Idle)
-                        Global.LocalPlayer.Jump();
-                    Thread.Sleep(1);
+                    PlayerState state = Global.LocalPlayer.State;
+                    if (state == PlayerState.Idle || state == PlayerState.DuckFinal || state == PlayerState.DuckStart)
+                        //Global.LocalPlayer.Jump();
+                        Global.LocalPlayer.ViewAngle.ClampAngle();
+
+                    ThreadSleep.Set(FunctionName);
                     continue;
                 }
 

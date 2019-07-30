@@ -1,27 +1,25 @@
 ﻿using System;
+using System.Numerics;
+using Darc_Euphoria.Euphoric;
 using Smurferrino.Business.Enums;
 using Smurferrino.Business.Helpers;
 using Smurferrino.Business.Memory;
+using Smurferrino.Business.Objects;
+using Smurferrino.Business.Weapons;
+using static Darc_Euphoria.Euphoric.Structures;
 
 namespace Smurferrino.Business.Players
 {
-    public class LocalPlayer
+    public class LocalPlayer : Player
     {
-        public LocalPlayer()
+        public LocalPlayer(int index) : base(index)
         {
             Global.LocalPlayer = this;
         }
 
-        public int Index { get; set; }
-        /// <summary>
-        /// Returns LocalPlayer's handler
-        /// </summary>
-        internal int BaseOffset =>
-            ManageMemory.ReadMemory<int>(BaseMemory.BaseAddress + MemoryAddr.dwLocalPlayer);
+        public GlobalVarBase GlobalVar =>
+            ManageMemory.ReadMemory<GlobalVarBase>(BaseMemory.EngineAddress + MemoryAddr.dwGlobalVars);
 
-        /// <summary>
-        /// Returns player's state e.g. Idle, crouching, jumping
-        /// </summary>
         protected internal int StateFlag =>
             ManageMemory.ReadMemory<int>(BaseOffset + MemoryAddr.m_fFlags);
 
@@ -32,32 +30,16 @@ namespace Smurferrino.Business.Players
             Enum.IsDefined(typeof(PlayerState), StateFlag) ? (PlayerState)StateFlag : PlayerState.Null;
 
         /// <summary>
-        /// Returns player's team flag
-        /// </summary>
-        protected internal int TeamFlag =>
-            ManageMemory.ReadMemory<int>(BaseOffset + MemoryAddr.m_iTeamNum);
-        /// <summary>
-        /// Get enumerated value of <see cref="TeamFlag"/>
-        /// </summary>
-        public TeamEnum Team =>
-            (TeamEnum)TeamFlag;
-
-        /// <summary>
-        /// Returns player's id which is actually on crosshair
+        /// Returns player id which is actually on crosshair
         /// </summary>
         protected internal int CrosshairId =>
             ManageMemory.ReadMemory<int>(BaseOffset + MemoryAddr.m_iCrosshairId);
+
         /// <summary>
-        /// Get <see cref="Player"/>'s instance which is actually on crosshair
+        /// Get <see cref="Player"/> instance which is actually on crosshair
         /// </summary>
         public Player CrosshairPlayer =>
             new Player(CrosshairId - 1);
-
-        public int Health =>
-            ManageMemory.ReadMemory<int>(BaseOffset + MemoryAddr.m_iHealth);
-
-        public bool IsAlive =>
-            Health > 0;
 
         /// <summary>
         /// Return and sets client FOV (120-150 is better, sees much more)
@@ -85,7 +67,7 @@ namespace Smurferrino.Business.Players
         }
 
         /// <summary>
-        /// Returns and sets 
+        /// Returns and sets flash duration
         /// </summary>
         public float FlashAlphaDuration
         {
@@ -93,8 +75,37 @@ namespace Smurferrino.Business.Players
             set => ManageMemory.WriteMemory<float>(BaseOffset + MemoryAddr.m_flFlashDuration, value);
         }
 
-        public int CompetetiveRank => 
-            ManageMemory.ReadMemory<int>(BaseOffset + MemoryAddr.m_iCompetitiveRanking);
+        public int ShotsFired =>
+            ManageMemory.ReadMemory<int>(BaseOffset + MemoryAddr.m_iShotsFired);
 
+        private Vector2 _viewAngle;
+        public Vector2 ViewAngle
+        {
+            get
+            {
+                return _viewAngle = ManageMemory.ReadMemory<Vector2>(BaseMemory.ClientState + MemoryAddr.dwClientState_ViewAngles);
+            }
+            set
+            {
+                if (value.Equals(_viewAngle)) return;
+
+                ManageMemory.WriteMemory<Vector2>(BaseMemory.ClientState + MemoryAddr.dwClientState_ViewAngles, value);
+                _viewAngle = value;
+            }
+        }
+
+        public Vector2 PunchAngle => ManageMemory.ReadMemory<Vector2>(BaseOffset + MemoryAddr.m_aimPunchAngle);
+
+        public bool Scoped
+        {
+            get => ManageMemory.ReadMemory<bool>(BaseOffset + MemoryAddr.m_bIsScoped);
+            set
+            {
+                for (int i = 0; i < 1750; i++)
+                    ManageMemory.WriteMemory<bool>(BaseOffset + MemoryAddr.m_bIsScoped, value);
+            }
+        }
+
+        [Obsolete("Don't use this", true)] public override bool IsAlly => true;
     }
 }

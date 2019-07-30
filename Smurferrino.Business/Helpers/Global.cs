@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Smurferrino.Business.Enums;
+using Smurferrino.Business.Memory;
 using Smurferrino.Business.Players;
 
 namespace Smurferrino.Business.Helpers
@@ -19,6 +20,9 @@ namespace Smurferrino.Business.Helpers
                 ProcessStateClass.OnProcessStateChanged(EventArgs.Empty);
             }
         }
+
+        public static int GameState =>
+            ManageMemory.ReadMemory<int>(MemoryAddr.dwClientState_State + BaseMemory.ClientState);
 
        public static LocalPlayer LocalPlayer { get; set; }
        public static List<Player> Players { get; set; }

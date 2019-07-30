@@ -75,6 +75,17 @@ namespace Smurferrino.ViewModels
             }
         }
 
+        private CompSpecsModel _compSpecs;
+        public CompSpecsModel CompSpecs
+        {
+            get => _compSpecs;
+            set
+            {
+                if (_compSpecs == value) return;
+                _compSpecs = value;
+                NotifyOfPropertyChange(() => CompSpecs);
+            }
+        }
 
         private ProcessState _gameState;
 
@@ -134,6 +145,7 @@ namespace Smurferrino.ViewModels
             Bunny = (BunnyModel)FunctionModelSingleton.Instance.FunctionModels.GetByFunctionName("Bunny").Model;
             Glow = (GlowModel) FunctionModelSingleton.Instance.FunctionModels.GetByFunctionName("Glow").Model;
             Visuals = (VisualsModel) FunctionModelSingleton.Instance.FunctionModels.GetByFunctionName("Visuals").Model;
+            CompSpecs = (CompSpecsModel) FunctionModelSingleton.Instance.FunctionModels.GetByFunctionName("CompSpecs").Model;
 
 
             ProcessStateClass.ProcessStateChanged += (sender, e) => GameState = Global.ProcessState;
@@ -155,6 +167,7 @@ namespace Smurferrino.ViewModels
                     Bunny = (BunnyModel)Bunny.LoadModel(fileName);
                     Glow = (GlowModel)Glow.LoadModel(fileName);
                     Visuals = (VisualsModel) Visuals.LoadModel(fileName);
+                    CompSpecs = (CompSpecsModel) CompSpecs.LoadModel(fileName);
                 }
             }
         }
@@ -165,6 +178,7 @@ namespace Smurferrino.ViewModels
             Bunny.SaveModelRAM();
             Glow.SaveModelRAM();
             Visuals.SaveModelRAM();
+            CompSpecs.SaveModelRAM();
 
             var saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Config|*.json";
