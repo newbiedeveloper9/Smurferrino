@@ -78,8 +78,11 @@
     <Compile Include="ExecuteOnStart.cs" />
     <Compile Include="FunctionModels\CompSpecsModel.cs" />
     <Compile Include="FunctionModels\GlowModel.cs" />
+    <Compile Include="FunctionModels\RCSModel.cs" />
+    <Compile Include="FunctionModels\TestModel.cs" />
     <Compile Include="FunctionModels\VisualsModel.cs" />
     <Compile Include="Helpers\CloneExt.cs" />
+    <Compile Include="Helpers\StopwatchHelper.cs" />
     <Compile Include="Helpers\ThreadSleep.cs" />
     <Compile Include="PublishSub\ClientReloadPub.cs" />
     <Compile Include="Serialize\FilePaths.cs" />

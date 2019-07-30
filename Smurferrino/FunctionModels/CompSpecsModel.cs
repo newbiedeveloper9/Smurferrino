@@ -24,7 +24,6 @@ namespace Smurferrino.FunctionModels
             get => _userSpec;
             set
             {
-                Console.WriteLine(value);
                 if (_userSpec == value) return;
                 _userSpec = value;
                 NotifyOfPropertyChange(() => UserSpec);

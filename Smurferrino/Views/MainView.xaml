@@ -38,7 +38,7 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical" Margin="0 12 0 0">
-                        <TextBlock Text="Spray duration"/>
+                        <TextBlock Text="Shots"/>
                         <TextBox Text="{Binding SprayDuration, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
 
@@ -55,6 +55,12 @@
             </GroupBox>
 
             <GroupBox Margin="12" Header="Bunnyhop" DataContext="{Binding Path=Bunny, UpdateSourceTrigger=PropertyChanged}">
+                <StackPanel Margin="10">
+                    <CheckBox IsChecked="{Binding Enabled, UpdateSourceTrigger=PropertyChanged}" Content="Enable"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Margin="12" Header="RCS" DataContext="{Binding Path=RCS, UpdateSourceTrigger=PropertyChanged}">
                 <StackPanel Margin="10">
                     <CheckBox IsChecked="{Binding Enabled, UpdateSourceTrigger=PropertyChanged}" Content="Enable"/>
                 </StackPanel>
@@ -112,8 +118,20 @@
                            Margin="12"/>
             </GroupBox>
 
-            <GroupBox Header="TestModel platform" DataContext="{Binding Path=TestModel, UpdateSourceTrigger=PropertyChanged}">
-
+            <GroupBox Header="TestModel platform" DataContext="{Binding Path=TestModel, UpdateSourceTrigger=PropertyChanged}" Width="350">
+                <StackPanel>
+                    <ItemsControl ItemsSource="{Binding Path=TestCollection}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="60" HorizontalAlignment="Right"/>
+                                    <TextBlock Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Button cal:Message.Attach="Reset()" Content="Reset"/>
+                </StackPanel>
             </GroupBox>
         </WrapPanel>
     </StackPanel>

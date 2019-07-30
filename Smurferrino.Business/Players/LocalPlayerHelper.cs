@@ -1,18 +1,20 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Smurferrino.Business.Helpers;
 using Smurferrino.Business.Memory;
+using Smurferrino.Helpers;
 
 namespace Smurferrino.Business.Players
 {
     public static class LocalPlayerHelper
     {
-        public static void Attack(this LocalPlayer localPlayer, int sprayDuration)
+        public static void AttackStart(this LocalPlayer localPlayer)
         {
-            if (sprayDuration < 20)
-                sprayDuration = 20;
-
             ManageMemory.WriteMemory<int>(BaseMemory.BaseAddress + MemoryAddr.dwForceAttack, 5);
-            Thread.Sleep(sprayDuration);
+        }
+
+        public static void AttackEnd(this LocalPlayer localPlayer)
+        {
             ManageMemory.WriteMemory<int>(BaseMemory.BaseAddress + MemoryAddr.dwForceAttack, 4);
         }
 

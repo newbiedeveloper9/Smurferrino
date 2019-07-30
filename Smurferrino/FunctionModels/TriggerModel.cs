@@ -49,22 +49,20 @@ namespace Smurferrino.FunctionModels
             if (DoubleCheck)
             {
                 if (CanShoot())
-                    Global.LocalPlayer.Attack(SprayDuration + random.Next(MaxRandomSleep));
+                    Shot();
                 else
                 {
                     while (!CanShoot())
                     {
                         if (!(Key == 0 || Keyboard.IsPressed(Key)))
                             return;
-
-                        ThreadSleep.Set(FunctionName);
                     }
-                    Global.LocalPlayer.Attack(SprayDuration + random.Next(MaxRandomSleep));
+                    Shot();
                 }
             }
             else
             {
-                Global.LocalPlayer.Attack(SprayDuration + random.Next(MaxRandomSleep));
+                Shot();
             }
 
             if (!(Key == 0 || Keyboard.IsPressed(Key)))
@@ -79,11 +77,22 @@ namespace Smurferrino.FunctionModels
             var weapon = localPlayer.Inventory.ActiveWeapon.TypeOfWeapon();
 
             var target = Global.LocalPlayer.CrosshairPlayer;
-            Console.WriteLine(localPlayer);
-            return target.Team != localPlayer.Team && localPlayer.IsAlive && target.IsAlive && !target.Dormant &&
+            return !target.IsAlly && localPlayer.IsAlive && target.IsAlive && !target.Dormant &&
                    weapon != WeaponType.Bomb && weapon != WeaponType.Grenade && weapon != WeaponType.Knife;
         }
 
+        private void Shot()
+        {
+            Console.WriteLine("Shots fired:" + Global.LocalPlayer.ShotsFired);
+            if (HasResources)
+                Global.LocalPlayer.AttackStart();
+            while (HasResources)
+                Thread.Sleep(20);
+            Global.LocalPlayer.AttackEnd();
+        }
+
+        private bool HasResources => Global.LocalPlayer.ShotsFired < SprayDuration &&
+                                     Global.LocalPlayer.Inventory.ActiveWeapon.Ammo > 0;
 
         #region Properties
         private bool _enabled;

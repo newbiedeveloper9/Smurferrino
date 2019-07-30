@@ -18,6 +18,7 @@ namespace Smurferrino.Helpers
             {"Trigger", 10 },
             {"Bunny", 5 },
             {"Radar", 300 },
+            {"RCS", 10},
         };
 
         private static readonly Dictionary<string, int> NormalSpec = new Dictionary<string, int>()
@@ -25,7 +26,8 @@ namespace Smurferrino.Helpers
             {"Glow",  3},
             {"Trigger", 5 },
             {"Bunny", 2 },
-            {"Radar", 100 },
+            {"Radar", 75 },
+            {"RCS", 5},
         };
 
         private static readonly Dictionary<string, int> UltraSpec = new Dictionary<string, int>()
@@ -34,6 +36,7 @@ namespace Smurferrino.Helpers
             {"Trigger", 2 },
             {"Bunny", 1 },
             {"Radar", 20 },
+            {"RCS", 2},
         };
 
         public static void Set(string key)

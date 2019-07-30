@@ -87,6 +87,31 @@ namespace Smurferrino.ViewModels
             }
         }
 
+        private RCSModel _rcs;
+        public RCSModel RCS
+        {
+            get => _rcs;
+            set
+            {
+                if (_rcs == value) return;
+                _rcs = value;
+                NotifyOfPropertyChange(() => RCS);
+            }
+        }
+
+        private TestModel _testModel;
+        public TestModel TestModel
+        {
+            get => _testModel;
+            set
+            {
+                if (_testModel == value) return;
+                _testModel = value;
+                NotifyOfPropertyChange(() => TestModel);
+            }
+        }
+
+
         private ProcessState _gameState;
 
         public ProcessState GameState
@@ -146,7 +171,8 @@ namespace Smurferrino.ViewModels
             Glow = (GlowModel) FunctionModelSingleton.Instance.FunctionModels.GetByFunctionName("Glow").Model;
             Visuals = (VisualsModel) FunctionModelSingleton.Instance.FunctionModels.GetByFunctionName("Visuals").Model;
             CompSpecs = (CompSpecsModel) FunctionModelSingleton.Instance.FunctionModels.GetByFunctionName("CompSpecs").Model;
-
+            RCS = (RCSModel) FunctionModelSingleton.Instance.FunctionModels.GetByFunctionName("RCS").Model;
+            TestModel = new TestModel();
 
             ProcessStateClass.ProcessStateChanged += (sender, e) => GameState = Global.ProcessState;
         }
@@ -168,6 +194,7 @@ namespace Smurferrino.ViewModels
                     Glow = (GlowModel)Glow.LoadModel(fileName);
                     Visuals = (VisualsModel) Visuals.LoadModel(fileName);
                     CompSpecs = (CompSpecsModel) CompSpecs.LoadModel(fileName);
+                    RCS = (RCSModel) RCS.LoadModel(fileName);
                 }
             }
         }
@@ -179,6 +206,7 @@ namespace Smurferrino.ViewModels
             Glow.SaveModelRAM();
             Visuals.SaveModelRAM();
             CompSpecs.SaveModelRAM();
+            RCS.SaveModelRAM();
 
             var saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Config|*.json";
@@ -200,17 +228,7 @@ namespace Smurferrino.ViewModels
 
         public void Test()
         {
-            /*Task.Factory.StartNew(() =>
-            {
-                while (true)
-                {
-                    Global.LocalPlayer.FOV = 150;
-                    Thread.Sleep(5);
-                }
-            });*/
-
-            //  Global.LocalPlayer.FlashMaxAlpha = 255;
-
+            
         }
     }
 }

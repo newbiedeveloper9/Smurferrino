@@ -26,9 +26,7 @@ namespace Smurferrino.FunctionModels
                 {
                     PlayerState state = Global.LocalPlayer.State;
                     if (state == PlayerState.Idle || state == PlayerState.DuckFinal || state == PlayerState.DuckStart)
-                        //Global.LocalPlayer.Jump();
-                        Global.LocalPlayer.ViewAngle.ClampAngle();
-
+                        Global.LocalPlayer.Jump();
                     ThreadSleep.Set(FunctionName);
                     continue;
                 }

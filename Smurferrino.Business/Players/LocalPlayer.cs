@@ -95,6 +95,8 @@ namespace Smurferrino.Business.Players
         }
 
         public Vector2 PunchAngle => ManageMemory.ReadMemory<Vector2>(BaseOffset + MemoryAddr.m_aimPunchAngle);
+        public Vector2 PunchAngleVel => ManageMemory.ReadMemory<Vector2>(BaseOffset + MemoryAddr.m_aimPunchAngleVel);
+        public Vector2 ViewPunchAngle => ManageMemory.ReadMemory<Vector2>(BaseOffset + MemoryAddr.m_viewPunchAngle);
 
         public bool Scoped
         {
