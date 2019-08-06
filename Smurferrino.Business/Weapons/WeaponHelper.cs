@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Smurferrino.Business.Weapons
 {
-    class WeaponHelper
+    public class WeaponHelper
     {
-        public static Dictionary<int, string> WeaponNameDictionary = new Dictionary<int, string>()
+        public static Dictionary<int, string> WeaponNames = new Dictionary<int, string>()
         {
             { 1, "Desert Eagle"},
             { 2, "Dual Berettas"},

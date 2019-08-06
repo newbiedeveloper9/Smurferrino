@@ -20,18 +20,31 @@ namespace Smurferrino.FunctionModels
 
         public override void DoWork()
         {
-           /* while (true)
+            /* while (true)
+             {
+                 TestCollection[0].Value = StopwatchHelper.average.ToString();
+                 TestCollection[1].Value = StopwatchHelper.iterate.ToString();
+
+                 if (StopwatchHelper.iterate >= 1000 && string.IsNullOrEmpty(TestCollection[2].Value))
+                     TestCollection[2].Value = StopwatchHelper.value.ToString();
+                 if (StopwatchHelper.iterate >= 3000 && string.IsNullOrEmpty(TestCollection[3].Value))
+                     TestCollection[3].Value = StopwatchHelper.value.ToString();
+
+                 Thread.Sleep(2);
+             }*/
+            while (true)
             {
-                TestCollection[0].Value = StopwatchHelper.average.ToString();
-                TestCollection[1].Value = StopwatchHelper.iterate.ToString();
+                if (Global.LocalPlayer == null || Global.ProcessState != ProcessState.Attached)
+                {
+                    Thread.Sleep(1000);
+                    continue;
+                }
 
-                if (StopwatchHelper.iterate >= 1000 && string.IsNullOrEmpty(TestCollection[2].Value))
-                    TestCollection[2].Value = StopwatchHelper.value.ToString();
-                if (StopwatchHelper.iterate >= 3000 && string.IsNullOrEmpty(TestCollection[3].Value))
-                    TestCollection[3].Value = StopwatchHelper.value.ToString();
+                if (Keyboard.IsPressed(164))
+                    TestCollection[0].Value = Global.LocalPlayer.PunchAngle.ToString();
 
-                Thread.Sleep(2);
-            }*/
+                Thread.Sleep(10);
+            }
         }
 
         public TestModel()
@@ -42,7 +55,20 @@ namespace Smurferrino.FunctionModels
                 new TestObj("Count"),
                 new TestObj("1000"),
                 new TestObj("3000"),*/
+
+                new TestObj("Punch")
             };
+        }
+
+        public void Stop()
+        {
+            //Global.LocalPlayer.SendPackets = false;
+            Global.LocalPlayer.ThirdPerson = !Global.LocalPlayer.ThirdPerson;
+        }
+
+        public void Update()
+        {
+           // Global.LocalPlayer.ForceUpdate();
         }
 
         private BindableCollection<TestObj> _testCollection;

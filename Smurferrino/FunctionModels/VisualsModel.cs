@@ -18,20 +18,17 @@ namespace Smurferrino.FunctionModels
         public override string FunctionName { get; set; } = "Visuals";
         private DateTime radarTimer;
 
-        public VisualsModel()
-        {
-
-        }
-
         public override void DoWork()
         {
             while (true)
             {
-                if (Global.ProcessState != ProcessState.Attached)
+                if (Global.ProcessState != ProcessState.Attached && Global.LocalPlayer == null)
                 {
                     Thread.Sleep(1000);
                     continue;
                 }
+
+                var lPlayer = Global.LocalPlayer;
 
                 if (RadarSpottedEnabled && radarTimer <= DateTime.Now)
                 {
@@ -41,7 +38,7 @@ namespace Smurferrino.FunctionModels
 
 
                     radarTimer = DateTime.Now.AddMilliseconds(ThreadSleep.Get("Radar"));
-                    Global.LocalPlayer.FlashMaxAlpha = 255f * (FlashbangAlphaPercentage / 100);
+                    lPlayer.FlashMaxAlpha = 255f * (FlashbangAlphaPercentage / 100);
                 }
 
                 if (!FOVEnabled)
@@ -50,30 +47,31 @@ namespace Smurferrino.FunctionModels
                     continue;
                 }
 
-                //IF SNIPER THEN CONTINUE
+                if (lPlayer.Inventory.ActiveWeapon.TypeOfWeapon() == WeaponType.Sniper) continue;
 
                 if ((Keyboard.IsPressed(FOVKey) || FOVKey == 0))
                 {
-                    if (Global.LocalPlayer.FOV != FOV)
+                    if (lPlayer.FOV != FOV)
                     {
                         for (int i = 0; i < 1750; i++) //flood to bruteforce FOV (the only way probably)
                         {
-                            Global.LocalPlayer.FOV = FOV;
+                            lPlayer.FOV = FOV;
                         }
                         continue;
                     }
                 }
                 else
                 {
-                    if (Global.LocalPlayer.FOV != 0)
+                    if (lPlayer.FOV != 0)
                     {
                         for (int i = 0; i < 1750; i++) //flood to bruteforce FOV (the only way probably)
                         {
-                            Global.LocalPlayer.FOV = 0;
+                            lPlayer.FOV = 0;
                         }
                         continue;
                     }
                 }
+
                 Thread.Sleep(10);
             }
         }

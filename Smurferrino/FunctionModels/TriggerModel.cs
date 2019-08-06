@@ -1,33 +1,65 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using Caliburn.Micro;
+using Darc_Euphoria.Euphoric;
 using Newtonsoft.Json;
 using Smurferrino.Business.Enums;
 using Smurferrino.Business.Helpers;
+using Smurferrino.Business.Memory;
 using Smurferrino.Business.Players;
+using Smurferrino.Business.Weapons;
 using Smurferrino.Helpers;
+using Smurferrino.Interfaces;
+using Smurferrino.Models;
+using Smurferrino.Services;
 
 namespace Smurferrino.FunctionModels
 {
     public class TriggerModel : BaseFunctionModel
     {
-        private readonly Random random;
+        private readonly Random _rnd;
+        private readonly IRcs RCS;
 
         public override string FunctionName { get; set; } = "Trigger";
 
-        public TriggerModel()
+        public TriggerModel(IRcs rcs)
         {
-            random = new Random();
+            RCS = rcs;
+            _rnd = new Random();
+            WeaponCollection = new BindableCollection<WeaponModel>();
+
+            foreach (var weapon in WeaponHelper.WeaponNames)
+            {
+                var model = new WeaponModel(weapon.Key, weapon.Value);
+                WeaponCollection.Add(model);
+            }
         }
 
         public override void DoWork()
         {
+            while (Global.LocalPlayer == null)
+            {
+                Thread.Sleep(500);
+            }
+
+            Global.LocalPlayer.AfterShotFire += (sender, args) =>
+            {
+                Global.LocalPlayer.SendPackets = false;
+                Global.LocalPlayer.ViewAngle = RCS.NewViewAngle().NormalizeAngle();
+                Thread.Sleep(10);
+                Global.LocalPlayer.SendPackets = true;
+            };
+
             while (true)
             {
-                if (!Enabled || Global.ProcessState != ProcessState.Attached)
+                if (!Enabled || Global.ProcessState != ProcessState.Attached || Global.LocalPlayer == null)
                 {
                     Thread.Sleep(1000);
                     continue;
                 }
+
 
                 if (Key == 0 || Keyboard.IsPressed(Key))
                 {
@@ -39,9 +71,10 @@ namespace Smurferrino.FunctionModels
             }
         }
 
+        #region Functions
         public void TriggerPattern()
         {
-            Thread.Sleep(PreSprayDelay + random.Next(MaxRandomSleep));
+       //     Thread.Sleep(PreSprayDelay + _rnd.Next(MaxRandomSleep));
 
             if (!(Key == 0 || Keyboard.IsPressed(Key)))
                 return;
@@ -68,7 +101,7 @@ namespace Smurferrino.FunctionModels
             if (!(Key == 0 || Keyboard.IsPressed(Key)))
                 return;
 
-            Thread.Sleep(AfterSprayDelay + random.Next(MaxRandomSleep));
+//            Thread.Sleep(AfterSprayDelay + _rnd.Next(MaxRandomSleep));
         }
 
         private bool CanShoot()
@@ -83,16 +116,22 @@ namespace Smurferrino.FunctionModels
 
         private void Shot()
         {
+            //Don't compensate recoil between the shots, only compensate it on each shot through your aimbot.
+
             Console.WriteLine("Shots fired:" + Global.LocalPlayer.ShotsFired);
             if (HasResources)
                 Global.LocalPlayer.AttackStart();
             while (HasResources)
                 Thread.Sleep(20);
             Global.LocalPlayer.AttackEnd();
-        }
 
-        private bool HasResources => Global.LocalPlayer.ShotsFired < SprayDuration &&
-                                     Global.LocalPlayer.Inventory.ActiveWeapon.Ammo > 0;
+            RCS.Reset();
+        }
+        #endregion Functions
+
+        private bool HasResources => Global.LocalPlayer.ShotsFired < 3 &&
+                                     Global.LocalPlayer.Inventory.ActiveWeapon.Ammo > 0 &&
+                                     !Global.LocalPlayer.IsReloading;
 
         #region Properties
         private bool _enabled;
@@ -105,46 +144,6 @@ namespace Smurferrino.FunctionModels
                 if (_enabled == value) return;
                 _enabled = value;
                 NotifyOfPropertyChange(() => Enabled);
-            }
-        }
-
-        private int _preSprayDelay;
-        [JsonProperty]
-        public int PreSprayDelay
-        {
-            get => _preSprayDelay;
-            set
-            {
-                if (_preSprayDelay == value) return;
-                _preSprayDelay = value;
-                NotifyOfPropertyChange(() => PreSprayDelay);
-            }
-        }
-
-        private int _sprayDuration;
-        [JsonProperty]
-        public int SprayDuration
-        {
-            get => _sprayDuration;
-            set
-            {
-                if (_sprayDuration == value) return;
-                _sprayDuration = value;
-                NotifyOfPropertyChange(() => SprayDuration);
-            }
-        }
-
-        private int _afterSprayDelay;
-        [JsonProperty]
-        public int AfterSprayDelay
-        {
-            get => _afterSprayDelay;
-            set
-            {
-                if (_afterSprayDelay == value) return;
-                _afterSprayDelay = value;
-                NotifyOfPropertyChange(() => AfterSprayDelay);
-
             }
         }
 
@@ -184,6 +183,18 @@ namespace Smurferrino.FunctionModels
                 if (_maxRandomSleep == value) return;
                 _maxRandomSleep = value;
                 NotifyOfPropertyChange(() => MaxRandomSleep);
+            }
+        }
+
+        private BindableCollection<WeaponModel> _weaponCollection;
+        public BindableCollection<WeaponModel> WeaponCollection
+        {
+            get => _weaponCollection;
+            set
+            {
+                if (_weaponCollection == value) return;
+                _weaponCollection = value;
+                NotifyOfPropertyChange(() => WeaponCollection);
             }
         }
         #endregion Properties

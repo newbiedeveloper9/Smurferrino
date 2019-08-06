@@ -63,7 +63,7 @@ namespace Smurferrino.Business.Weapons
         /// Returns weapon name
         /// </summary>
         public string Name =>
-            WeaponHelper.WeaponNameDictionary[Id];
+            WeaponHelper.WeaponNames.ContainsKey(Id) ? WeaponHelper.WeaponNames[Id] : "unknown";
 
         
     }

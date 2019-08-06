@@ -11,27 +11,16 @@ using Smurferrino.Business.Enums;
 using Smurferrino.Business.Helpers;
 using Smurferrino.Business.Players;
 using Smurferrino.Helpers;
+using Smurferrino.Interfaces;
+using Smurferrino.Services;
 
 namespace Smurferrino.FunctionModels
 {
     public class RCSModel : BaseFunctionModel
     {
         public override string FunctionName { get; set; } = "RCS";
-
-        private Structures.Vector2 _oldAimPunch;
-        private Structures.Vector2 RCS()
-        {
-            var lPlayer = Global.LocalPlayer;
-            var currentViewAngles = lPlayer.ViewAngle;
-            var aimPunch = lPlayer.PunchAngle * 2f;
-
-            var newViewAngles = new Structures.Vector2();
-            newViewAngles.x = ((currentViewAngles + _oldAimPunch).x - aimPunch.x);
-            newViewAngles.y = ((currentViewAngles + _oldAimPunch).y - aimPunch.y);
-
-            _oldAimPunch = aimPunch;
-            return newViewAngles;
-        }
+        private IRcs RCS;
+        private bool _reset = false;
 
         public override void DoWork()
         {
@@ -48,20 +37,27 @@ namespace Smurferrino.FunctionModels
                 {
                     var lPlayer = Global.LocalPlayer;
                     var wpn = lPlayer.Inventory.ActiveWeapon.TypeOfWeapon();
-
-                    if (lPlayer.ShotsFired >= 1)
+                    if (wpn != WeaponType.Pistol && lPlayer.Inventory.ActiveWeapon.Name != "AWP" &&
+                        wpn != WeaponType.Knife && wpn != WeaponType.Shotgun)
                     {
-                        lPlayer.ViewAngle = RCS().NormalizeAngle();
+                        if (lPlayer.ShotsFired >= 1)
+                            lPlayer.ViewAngle = RCS.NewViewAngle().NormalizeAngle();
+                        _reset = true;
                     }
-                    else if (Math.Abs(_oldAimPunch.x) > 0 || Math.Abs(_oldAimPunch.y) > 0)
-                    {
-                        _oldAimPunch = new Structures.Vector2();
-                    }
-
                 }
-
+                else if (_reset)
+                {
+                    _reset = false;
+                    RCS.HardReset();
+                }
+                 
                 ThreadSleep.Set(FunctionName);
             }
+        }
+
+        public RCSModel(IRcs rcs)
+        {
+            RCS = rcs;
         }
 
         private bool _enabled;

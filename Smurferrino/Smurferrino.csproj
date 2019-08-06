@@ -74,6 +74,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppBootstrapper.cs" />
+    <Compile Include="Enums\BhopOption.cs" />
     <Compile Include="Enums\ComputerSpec.cs" />
     <Compile Include="ExecuteOnStart.cs" />
     <Compile Include="FunctionModels\CompSpecsModel.cs" />
@@ -84,6 +85,9 @@
     <Compile Include="Helpers\CloneExt.cs" />
     <Compile Include="Helpers\StopwatchHelper.cs" />
     <Compile Include="Helpers\ThreadSleep.cs" />
+    <Compile Include="Interfaces\IBunny.cs" />
+    <Compile Include="Interfaces\IRcs.cs" />
+    <Compile Include="Models\WeaponModel.cs" />
     <Compile Include="PublishSub\ClientReloadPub.cs" />
     <Compile Include="Serialize\FilePaths.cs" />
     <Compile Include="Serialize\FunctionModel.cs" />
@@ -94,6 +98,8 @@
     <Compile Include="FunctionModels\BunnyModel.cs" />
     <Compile Include="FunctionModels\TriggerModel.cs" />
     <Compile Include="Serialize\Hash.cs" />
+    <Compile Include="Services\Jumper.cs" />
+    <Compile Include="Services\NoRecoil.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Page Include="Views\MainView.xaml">

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Smurferrino.FunctionModels;
+using Smurferrino.Interfaces;
 using Smurferrino.Serialize;
+using Smurferrino.Services;
 
 namespace Smurferrino
 {
@@ -17,14 +19,16 @@ namespace Smurferrino
 
         private FunctionModelSingleton()
         {
+            IRcs recoilSys = new NoRecoil();
+
             FunctionModels = new List<FunctionModel>()
             {
                 new FunctionModel(new BunnyModel()),
-                new FunctionModel(new TriggerModel()),
+                new FunctionModel(new TriggerModel(recoilSys)),
                 new FunctionModel(new GlowModel()),
                 new FunctionModel(new VisualsModel()),
                 new FunctionModel(new CompSpecsModel()),
-                new FunctionModel(new RCSModel()),
+                new FunctionModel(new RCSModel(recoilSys)),
             };
         }
 

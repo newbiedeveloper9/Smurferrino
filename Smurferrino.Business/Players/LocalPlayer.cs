@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Threading;
 using Darc_Euphoria.Euphoric;
 using Smurferrino.Business.Enums;
 using Smurferrino.Business.Helpers;
@@ -75,8 +76,24 @@ namespace Smurferrino.Business.Players
             set => ManageMemory.WriteMemory<float>(BaseOffset + MemoryAddr.m_flFlashDuration, value);
         }
 
-        public int ShotsFired =>
-            ManageMemory.ReadMemory<int>(BaseOffset + MemoryAddr.m_iShotsFired);
+        private int _shotsFired;
+        public int ShotsFired
+        {
+            get
+            {
+                var amount = ManageMemory.ReadMemory<int>(BaseOffset + MemoryAddr.m_iShotsFired);
+
+                if (_shotsFired != amount && amount > 0)
+                {
+                    OnAfterShotFire(EventArgs.Empty);
+                    _shotsFired = amount;
+                }
+
+                return amount;
+            }
+        }
+
+        public bool IsReloading => ManageMemory.ReadMemory<bool>(MemoryAddr.m_bInReload);
 
         private Vector2 _viewAngle;
         public Vector2 ViewAngle
@@ -108,6 +125,43 @@ namespace Smurferrino.Business.Players
             }
         }
 
+        public bool ThirdPerson
+        {
+            get => ManageMemory.ReadMemory<int>(BaseOffset + MemoryAddr.m_iObserverMode) > 0;
+            set => ManageMemory.WriteMemory<int>(BaseOffset + MemoryAddr.m_iObserverMode, Convert.ToInt32(value));
+        }
+
+        public bool SendPackets
+        {
+            get => ManageMemory.ReadMemory<byte>(BaseMemory.EngineAddress + MemoryAddr.dwbSendPackets) == 1;
+            set
+            {
+                if (SendPackets != value)
+                    ManageMemory.WriteMemory<byte>(BaseMemory.EngineAddress + MemoryAddr.dwbSendPackets,
+                        Convert.ToByte(value));
+            }
+        }
+
+        private bool CanUpdate =>
+            ManageMemory.ReadMemory<int>(BaseMemory.ClientState + MemoryAddr.clientstate_delta_ticks) != -1;
+        public void ForceUpdate()
+        {
+            if (SendPackets || !CanUpdate) return;
+
+            SendPackets = true;
+            Thread.Sleep(10);
+            int clientState = ManageMemory.ReadMemory<int>(BaseMemory.EngineAddress + MemoryAddr.dwClientState);
+            ManageMemory.WriteMemory<int>(clientState + MemoryAddr.clientstate_delta_ticks, -1);
+        }
+
+
         [Obsolete("Don't use this", true)] public override bool IsAlly => true;
+
+        public event EventHandler AfterShotFire;
+        protected virtual void OnAfterShotFire(EventArgs e)
+        {
+            var handler = AfterShotFire;
+            handler?.Invoke(this, e);
+        }
     }
 }

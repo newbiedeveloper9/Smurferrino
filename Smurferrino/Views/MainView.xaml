@@ -12,10 +12,16 @@
         xmlns:viewModels="clr-namespace:Smurferrino.ViewModels"
         Height="490" Width="900">
     <UserControl.Resources>
-        <ObjectDataProvider x:Key="enumValues"
+        <ObjectDataProvider x:Key="compSpecsEnum"
                            MethodName="GetValues" ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="enums:ComputerSpec"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="bhopEnum"
+                            MethodName="GetValues" ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enums:BhopOption"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>
@@ -55,12 +61,16 @@
             </GroupBox>
 
             <GroupBox Margin="12" Header="Bunnyhop" DataContext="{Binding Path=Bunny, UpdateSourceTrigger=PropertyChanged}">
-                <StackPanel Margin="10">
-                    <CheckBox IsChecked="{Binding Enabled, UpdateSourceTrigger=PropertyChanged}" Content="Enable"/>
+                <StackPanel Margin="12">
+                    <CheckBox IsChecked="{Binding Enabled, UpdateSourceTrigger=PropertyChanged}" Content="Enable" Margin="6"/>
+
+                    <ComboBox  ItemsSource="{Binding Source={StaticResource bhopEnum}, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding CanBhopOption}"
+                               SelectedValue="{Binding Path=BhopOption, UpdateSourceTrigger=PropertyChanged}"
+                               Margin="6 6 6 6"/>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Margin="12" Header="RCS" DataContext="{Binding Path=RCS, UpdateSourceTrigger=PropertyChanged}">
+            <GroupBox Margin="12" Header="NoRecoil" DataContext="{Binding Path=RCS, UpdateSourceTrigger=PropertyChanged}">
                 <StackPanel Margin="10">
                     <CheckBox IsChecked="{Binding Enabled, UpdateSourceTrigger=PropertyChanged}" Content="Enable"/>
                 </StackPanel>
@@ -113,7 +123,7 @@
             <GroupBox Margin="12" Header="Computer specs (Refresh delay)"
                       DataContext="{Binding Path=CompSpecs, UpdateSourceTrigger=PropertyChanged}">
 
-                <ComboBox  ItemsSource="{Binding Source={StaticResource enumValues}, UpdateSourceTrigger=PropertyChanged}"
+                <ComboBox  ItemsSource="{Binding Source={StaticResource compSpecsEnum}, UpdateSourceTrigger=PropertyChanged}"
                            SelectedValue="{Binding UserSpec, UpdateSourceTrigger=PropertyChanged}"
                            Margin="12"/>
             </GroupBox>
@@ -130,7 +140,8 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                    <Button cal:Message.Attach="Reset()" Content="Reset"/>
+                    <Button cal:Message.Attach="Update()" Content="Update"/>
+                    <Button cal:Message.Attach="Stop()" Content="Stop"/>
                 </StackPanel>
             </GroupBox>
         </WrapPanel>
